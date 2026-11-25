@@ -1,0 +1,25 @@
+{
+  "name": "soundcloud-jam",
+  "version": "1.0.0",
+  "description": "A real-time SoundCloud Jam listening-room prototype",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samurai67-cyber/build-soundcloud-jam.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Samurai67-cyber/build-soundcloud-jam/issues"
+  },
+  "homepage": "https://github.com/Samurai67-cyber/build-soundcloud-jam#readme",
+  "dependencies": {
+    "ws": "^8.23.0"
+  },
+  "private": true
+}
