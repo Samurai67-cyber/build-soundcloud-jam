@@ -10,12 +10,22 @@ const clubDemo = [
 ];
 const root = path.join(__dirname,'public');
 const types = {'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json','.jpg':'image/jpeg','.mp3':'audio/mpeg','.mp4':'video/mp4','.pdf':'application/pdf'};
+const playerPage = fs.readFileSync(path.join(root,'index.html'),'utf8');
 const server = http.createServer((req,res)=>{
   if(req.url === '/health') return res.end('ok');
-  let route;
-  try { route = new URL(req.url,'http://localhost').pathname; }
+  let url;
+  try { url = new URL(req.url,'http://localhost'); }
   catch { res.writeHead(400); return res.end(); }
-  const file = path.resolve(root,'.'+(route==='/'?'/index.html':route));
+  const route=url.pathname;
+  if(['/', '/club', '/index.html'].includes(route)){
+    const club=route==='/club'||url.searchParams.get('mix')==='club';
+    const initial=url.searchParams.get('room')?null:(club?clubDemo:catalog)[0];
+    const html=playerPage.replaceAll('{{initialTitle}}',initial?.title||'Joining room…')
+      .replaceAll('{{initialArtist}}',initial?.artist||'');
+    res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
+    return res.end(html);
+  }
+  const file = path.resolve(root,'.'+route);
   if(!file.startsWith(root+path.sep) || !fs.statSync(file,{throwIfNoEntry:false})?.isFile()) {res.writeHead(404);return res.end();}
   res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');
   const size=fs.statSync(file).size;
